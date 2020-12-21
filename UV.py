@@ -1,4 +1,4 @@
-import maya.cmds as mc
+﻿import maya.cmds as mc
 import sys
 sys.setrecursionlimit(5000)
 #---------------------------------------------------------#
@@ -41,7 +41,11 @@ def alignUV(pivot):
     uv_fe = fe2uv(edge_fuv)
     uv_fe.remove(pivot)
     
+    # 上下左右
+    nextPivotList = ["", "", "", ""]
+    
     for uv in uv_fe:
+        
         # 選択している頂点のシェールしか処理しない
         if uv not in uvList_Shell:
             continue
@@ -50,17 +54,19 @@ def alignUV(pivot):
         uvPos = mc.polyEditUV(uv, query = True)
         vec = [uvPos[0] - pivotPos[0], uvPos[1] - pivotPos[1]]
         nearAxisIndex = nearAxis(vec)
+        nextPivotList[nearAxisIndex] = uv
         # 垂直方向に整列-----pivotPos.u -> uv.u
         if nearAxisIndex == 0 or nearAxisIndex == 1:
             mc.polyEditUV(uv, r = False, u = pivotPos[0])
         # 水平方向に整列-----pivotPos.v -> uv.v
         else:
             mc.polyEditUV(uv, r = False, v = pivotPos[1])
-        
+
+    for pivot in nextPivotList:
         # 整列完了に入れて、再帰する
-        if uv not in isAlignedList:
-            isAlignedList.append(uv)
-            alignUV(uv)
+        if pivot not in isAlignedList and pivot != "":
+            isAlignedList.append(pivot)
+            alignUV(pivot)
 
 
 #---------------------------------------------#
