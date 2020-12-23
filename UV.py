@@ -1,8 +1,9 @@
 ﻿import maya.cmds as mc
-import threading
-import time
+import maya.mel as mel
 import math
 import sys
+
+mc.refreshEditorTemplates()
 
 sys.setrecursionlimit(5000)
 #---------------------------関数定義------------------------------#
@@ -69,28 +70,33 @@ def alignUV(pivot):
             
         nearAxisIndex = nearAxis(vec)
         nextPivotList[nearAxisIndex] = uv
+        moveVertex = uv
+        move2Pos = pivotPos
+
+        # uv頂点の整列がやっていた場合、uv頂点の変わりにpivotを整列する
+        if uv in isAlignedList:
+            moveVertex = pivot
+            move2Pos = uvPos
+
         # 垂直方向に整列-----pivotPos.u -> uv.u
-        if nearAxisIndex == 0 or nearAxisIndex == 1:
-            mc.polyEditUV(uv, r = False, u = pivotPos[0])
+        if nearAxisIndex == 0 or nearAxisIndex == 2:
+            mc.polyEditUV(moveVertex, r = False, u = move2Pos[0])
         # 水平方向に整列-----pivotPos.v -> uv.v
         else:
-            mc.polyEditUV(uv, r = False, v = pivotPos[1])
+            mc.polyEditUV(moveVertex, r = False, v = move2Pos[1])
 
     for _pivot in nextPivotList:
         # 整列完了に入れて、再帰する
         if _pivot not in isAlignedList and _pivot != "":
             isAlignedList.append(_pivot)
-            mc.select(_pivot)
-            time.sleep(1)
-            print _pivot
+            alignUV(_pivot)
+            #mc.select(_pivot)
 
-            t = threading.Thread(target = alignUV, args = _pivot)
-            t.start()
 #---------------------------------------------#
 # pivotの格納
 pivot = mc.ls(selection = True)
-# 軸(上下左右)
-axisList = [[0, 1], [0, -1], [-1, 0], [1, 0]]
+# 軸
+axisList = [[0, 1], [-1, 0], [0, -1], [1, 0]]
 # UVShellに含めているUVを取得する
 uvList_Shell = flatten(mc.polyListComponentConversion(pivot, tuv = True, uvShell = True))
 # 整列完了の頂点
