@@ -1,12 +1,14 @@
 import maya.cmds as mc
-import urllib
+import urllib as url
 
-SCRIPT_PATH = "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/UV.py"
+SCRIPT_PATH = {
+    "UVAlign":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/UVAlignVer2.py"
+}
 
-f = url.urlopen(SCRIPT_PATH)
-
-scriptText = f.read()
-
-#print scriptText
-
-exec(scriptText)
+def loadFromGitHub(name):
+    f = url.urlopen(SCRIPT_PATH[name])
+    scriptText = f.read()
+    print(scriptText)
+    exec(scriptText)
+    
+loadFromGitHub("UVAlign")
