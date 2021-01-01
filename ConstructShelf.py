@@ -83,8 +83,9 @@ class _shelf():
 
 class FishShelf(_shelf):
     def loadFromGitHub(self, name):
-        f = url.urlopen(SCRIPT_PATH[name])
-        return f.read()
+        raw = url.urlopen(SCRIPT_PATH[name]).read()
+        text_decode = raw.decode("utf-8")
+        return text_decode
 
     def build(self):
         self.addButon("UVAlign", command = self.loadFromGitHub("UVAlign"))
