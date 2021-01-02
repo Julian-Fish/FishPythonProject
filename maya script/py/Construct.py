@@ -28,7 +28,7 @@ class _shelf():
         self.labelBackground = (0, 0, 0, 0)
         self.labelColour = (.9, .9, .9)
 
-        self._cleanOldShelf()
+        #self._cleanOldShelf()
         mc.setParent(self.name)
         self.build()
 
@@ -101,14 +101,18 @@ class FishShelf(_shelf):
         f.close()
 
     def build(self):
-        self._cleanOldShelf()
+        ReconstructCmd = self.downloadScriptsFromGitHub("Construct")
+        print(ReconstructCmd)
+        if ReconstructCmd == "":
+            mc.error("Contruct Error")
+            return False
+        else:
+            self._cleanOldShelf()
+            
+            self.addButon("Reconstruct", command = self.downloadScriptsFromGitHub("Construct"))
 
-        self.addButon("Reconstruct", command = self.downloadScriptsFromGitHub("Construct"))
-
-        self.downloadQTUIFromGitHub("MultiRename")
-        self.addButon("MultiRename", command = self.downloadScriptsFromGitHub("MultiRename"))
-        
-        self.addButon("UVAlign", command = self.downloadScriptsFromGitHub("UVAlign"))
-
-        print "update shelf"
+            self.downloadQTUIFromGitHub("MultiRename")
+            self.addButon("MultiRename", command = self.downloadScriptsFromGitHub("MultiRename"))
+            
+            self.addButon("UVAlign", command = self.downloadScriptsFromGitHub("UVAlign"))
 FishShelf()
