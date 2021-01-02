@@ -3,7 +3,7 @@ Maya Python Script Learning
 
 ## インストール方法（初期化）：
 
-![ConstructScript](https://github.com/Julian-Fish/FishPythonProject/blob/master/maya%20script/py/Construct.py)
+![Construct](https://github.com/Julian-Fish/FishPythonProject/blob/master/maya%20script/py/Construct.py)
 のコードをMayaで実行する
 
 
@@ -11,13 +11,13 @@ Maya Python Script Learning
 
 ## スクリプトの機能：
 
-### MultiRename
+### ![MultiRename](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py)
 
 名前一括変更
 
 ![MultiRenameGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/multiRename/multiRename.gif)
 
-### UVAlign
+### ![UVAlign](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/UVAlignVer2.py)
 
 UV整列（格子状）
 
