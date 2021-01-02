@@ -6,7 +6,7 @@ Maya Python Script Learning
 ![Construct](https://github.com/Julian-Fish/FishPythonProject/blob/master/maya%20script/py/Construct.py)
 のコードをMayaで実行する
 
-※ ネット環境が必須
+※ インターネット環境が必須
 
 
 ## スクリプトの機能：
