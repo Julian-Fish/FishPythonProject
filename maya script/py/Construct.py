@@ -2,7 +2,8 @@ import maya.cmds as mc
 import urllib as url
 
 SCRIPT_PATH = {
-    "UVAlign":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/UVAlignVer2.py", 
+    "ConstructShelf" : "", 
+    "UVAlign":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/UVAlignVer2.py", 
     "MultiRename":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py"
 }
 
@@ -100,8 +101,14 @@ class FishShelf(_shelf):
         f.close()
 
     def build(self):
+        self._cleanOldShelf()
+
+        self.addButon("Reconstruct", command = self.downloadScriptsFromGitHub("ConstructShelf"))
+
         self.downloadQTUIFromGitHub("MultiRename")
         self.addButon("MultiRename", command = self.downloadScriptsFromGitHub("MultiRename"))
+        
         self.addButon("UVAlign", command = self.downloadScriptsFromGitHub("UVAlign"))
 
+        print "update shelf"
 FishShelf()
