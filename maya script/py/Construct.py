@@ -2,13 +2,13 @@ import maya.cmds as mc
 import urllib as url
 
 SCRIPT_PATH = {
-    "ConstructShelf" : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py", 
-    "UVAlign":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/UVAlignVer2.py", 
-    "MultiRename":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py"
+    "Construct"     : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py", 
+    "UVAlign"       : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/UVAlignVer2.py", 
+    "MultiRename"   : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py"
 }
 
 QTUI_PATH = {
-    "MultiRename":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/qtui/multiRename.ui"
+    "MultiRename"   :"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/qtui/multiRename.ui"
 }
 
 def _null(*args):
@@ -103,7 +103,7 @@ class FishShelf(_shelf):
     def build(self):
         self._cleanOldShelf()
 
-        self.addButon("Reconstruct", command = self.downloadScriptsFromGitHub("ConstructShelf"))
+        self.addButon("Reconstruct", command = self.downloadScriptsFromGitHub("Construct"))
 
         self.downloadQTUIFromGitHub("MultiRename")
         self.addButon("MultiRename", command = self.downloadScriptsFromGitHub("MultiRename"))
