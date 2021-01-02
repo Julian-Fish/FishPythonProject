@@ -3,7 +3,7 @@ Maya Python Script Learning
 
 インストール方法（初期化）：
 
-maya scripts/py/Construct.pyのコードをそのままコピーして、Mayaに一回実行する
+maya scripts/py/Construct.pyのコードをMayaで実行する
 
 
 
