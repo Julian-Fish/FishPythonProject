@@ -2,7 +2,7 @@ import maya.cmds as mc
 import urllib as url
 
 SCRIPT_PATH = {
-    "ConstructShelf" : "", 
+    "ConstructShelf" : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py", 
     "UVAlign":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/UVAlignVer2.py", 
     "MultiRename":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py"
 }
