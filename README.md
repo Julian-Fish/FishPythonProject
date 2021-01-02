@@ -9,15 +9,15 @@ Maya Python Script Learning
 
 
 
-# スクリプトの機能：
+## スクリプトの機能：
 
-## MultiRename
+### MultiRename
 
 名前一括変更
 
 ![MultiRenameGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/multiRename/multiRename.gif)
 
-## UVAlign
+### UVAlign
 
 UV整列（格子状）
 
