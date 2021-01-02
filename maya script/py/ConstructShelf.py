@@ -2,7 +2,12 @@ import maya.cmds as mc
 import urllib as url
 
 SCRIPT_PATH = {
-    "UVAlign":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/UVAlignVer2.py"
+    "UVAlign":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/UVAlignVer2.py", 
+    "MultiRename":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py"
+}
+
+QTUI_PATH = {
+    "MultiRename":"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/qtui/multiRename.ui"
 }
 
 def _null(*args):
@@ -82,12 +87,21 @@ class _shelf():
 ###################################################################################
 
 class FishShelf(_shelf):
-    def loadFromGitHub(self, name):
+    def downloadScriptsFromGitHub(self, name):
         raw = url.urlopen(SCRIPT_PATH[name]).read()
         text_decode = raw.decode("utf-8")
         return text_decode
 
+    def downloadQTUIFromGitHub(self, name):
+        uiText = url.urlopen(QTUI_PATH[name]).read()
+        fileName = mc.workspace(fullName = True) + "/qtui/" + name + ".ui"
+        f = open(fileName, "w")   
+        f.write(uiText)
+        f.close()
+
     def build(self):
-        self.addButon("UVAlign", command = self.loadFromGitHub("UVAlign"))
+        self.downloadQTUIFromGitHub("MultiRename")
+        self.addButon("MultiRename", command = self.downloadScriptsFromGitHub("MultiRename"))
+        self.addButon("UVAlign", command = self.downloadScriptsFromGitHub("UVAlign"))
 
 FishShelf()

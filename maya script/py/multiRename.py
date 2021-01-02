@@ -5,7 +5,7 @@ from maya.app.general.mayaMixin import MayaQWidgetBaseMixin
 import maya.cmds as mc
 
 # 間接パスの指定
-UIFILEPATH = mc.workspace(fullName = True) + 'scripts/qtui/multiname_test.ui'
+UIFILEPATH = mc.workspace(fullName = True) + 'qtui/MultiRename.ui'
 # パターンの定義
 patternAlpha = "abcdefghijklmnpbqrstuvwxyz"
 patternListEng = ["First", "Second", "Third", "Fourth", "Fifth", "sixth", "seventh", "ninth", "tenth"]
