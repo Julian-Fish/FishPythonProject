@@ -18,3 +18,5 @@ maya scripts/py/Construct.pyのコードをMayaで実行する
 ## UVAlign
 
 UV整列（格子状）
+
+![MultiRenameGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/multiRename/UVAlign.gif)
