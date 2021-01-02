@@ -1,13 +1,13 @@
 # FishPythonProject
 Maya Python Script Learning
 
-インストール方法（初期化）：
+# インストール方法（初期化）：
 
 maya scripts/py/Construct.pyのコードをMayaで実行する
 
 
 
-スクリプトの機能：
+# スクリプトの機能：
 
 ①名前一括変更
 
