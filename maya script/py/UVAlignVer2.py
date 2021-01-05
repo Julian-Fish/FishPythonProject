@@ -118,19 +118,38 @@ def doAlign(_pivot, mode = 0):
 
 
 def alignUV(_pivot):
+    PROGRESS_AMOUNT = 0
     verticalUVList = []
     horizentalUVList = []
     verticalUVList, a   = doAlign(_pivot, 0)
     a, horizentalUVList = doAlign(_pivot, 1)
 
+    # 進捗状況を表示する
+    UVAmount = len(verticalUVList) + len(horizentalUVList) - 2
+    mc.progressWindow(title = "UVAlign", progress = 0, max = UVAmount, status = "Aligning ", isInterruptable = True)
+
     # 各垂直のUVをpivotに対して、水平に整列する
     verticalUVList.remove(_pivot)
     for uv in verticalUVList:
+        if mc.progressWindow(query = True, isCancelled = True):
+            return False
+        
+        PROGRESS_AMOUNT += 1
+        #progress = PROGRESS_AMOUNT / UVAmount
+        mc.progressWindow(title = "UVAlign", edit = True, progress = PROGRESS_AMOUNT)
         doAlign(uv, 1)
     # 各水平のUVをpivotとして、垂直に整列する
     horizentalUVList.remove(_pivot)
     for uv in horizentalUVList:
+        if mc.progressWindow(query = True, isCancelled = True):
+            return False
+        
+        PROGRESS_AMOUNT += 1
+        #progress = PROGRESS_AMOUNT / UVAmount
+        mc.progressWindow(title = "UVAlign", edit = True, progress = PROGRESS_AMOUNT)
         doAlign(uv, 0)
+    
+    return True
 
 
 #---------------------------------------------#
@@ -144,7 +163,9 @@ uvList_Shell = flatten(mc.polyListComponentConversion(pivot, tuv = True, uvShell
 # 整列完了の頂点
 isAlignedList = [pivot[0]]
 
-alignUV(pivot[0])
+isDone = alignUV(pivot[0])
+mc.progressWindow(title = "UVAlign", endProgress = True)
+print isDone
 #mc.select(uvList_Shell)
 #print(uvList_Shell)
     
