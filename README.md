@@ -4,7 +4,7 @@ Maya Python Script Learning
 ## インストール方法（初期化）：
 
 ![Construct](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py)
-のコードをMayaでPythonコードとして実行する
+のコードをMayaでPythonとして実行する
 
 ![InstallGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/Construct/install.gif)
 
