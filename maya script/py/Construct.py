@@ -29,8 +29,8 @@ class _shelf():
         self.labelColour = (.9, .9, .9)
 
         #self._cleanOldShelf()
-        mc.setParent(self.name)
         self.build()
+        mc.setParent(self.name)
 
     def build(self):
         '''This method should be overwritten in derived classes to actually build the shelf
