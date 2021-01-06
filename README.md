@@ -21,7 +21,7 @@ Maya Python Script Learning
 
 ### ![MultiRename](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py) 名前一括変更
 
-選択しているオブジェクトの名前を特定のパータンに一括で変更する
+選択しているオブジェクトの名前の接頭辞と接尾辞を特定のパータンに一括で変更する
 
 ![MultiRenameGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/multiRename/multiRename.gif)
 
