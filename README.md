@@ -3,13 +3,21 @@ Maya Python Script Learning
 
 ## インストール方法（初期化）：
 
-![Construct](https://github.com/Julian-Fish/FishPythonProject/blob/master/maya%20script/py/Construct.py)
+![Construct](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py)
 のコードをMayaでPythonコードとして実行する
+
+![InstallGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/Construct/install.gif)
 
 ※ インターネット環境が必須
 
 
 ## スクリプトの機能：
+
+### ![Construct](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py)
+
+シェルフの更新
+
+![ConstructGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/Construct/construct.gif)
 
 ### ![MultiRename](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py)
 
