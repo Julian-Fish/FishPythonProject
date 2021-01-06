@@ -1,9 +1,9 @@
-SCRIPT_PATH = {
-    "Construct"     : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py", 
-    "UVAlign"       : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/UVAlignVer2.py", 
-    "MultiRename"   : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py",
-}
+import maya.cmds as mc
 
-for name in SCRIPT_PATH:
-    print(name)
-    
+pivot = mc.ls(selection = True)
+pivot = mc.polyListComponentConversion(pivot, tuv = True)
+# 最初の方向（上下左右）
+verticalDir = [[0, 1], [0, -1]]
+horizentalDir = [[1, 0], [-1, 0]]
+# UVShellに含めているUVを取得する
+uvList_Shell = flatten(mc.polyListComponentConversion(pivot, tuv = True, uvShell = True))

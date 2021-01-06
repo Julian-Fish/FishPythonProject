@@ -171,6 +171,7 @@ def alignUV(_pivot):
 #---------------------------------------------#
 # pivotの格納
 pivot = mc.ls(selection = True)
+pivot = mc.polyListComponentConversion(pivot, tuv = True)
 # 最初の方向（上下左右）
 verticalDir = [[0, 1], [0, -1]]
 horizentalDir = [[1, 0], [-1, 0]]
