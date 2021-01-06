@@ -1,18 +1,9 @@
-import signal
-import time
+SCRIPT_PATH = {
+    "Construct"     : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py", 
+    "UVAlign"       : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/UVAlignVer2.py", 
+    "MultiRename"   : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py",
+}
 
-def signal_handler(signum, frame):
-    raise Exception("Timed out!")
-
-def main():
+for name in SCRIPT_PATH:
+    print(name)
     
-    signal.signal( signal.SIGALRM, signal_handler )
-    signal.alarm( 5 ) # 5 seconds alarm 
-    try:
-        your_method_here() # Your function. 
-        signal.alarm(0) # make it disable alarm. 
-    except Exception:
-        print ("Timed out!")
-        
-if __name__ == '__main__':
-    main()

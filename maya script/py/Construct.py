@@ -4,8 +4,14 @@ import urllib as url
 SCRIPT_PATH = {
     "Construct"     : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py", 
     "UVAlign"       : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/UVAlignVer2.py", 
-    "MultiRename"   : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py"
+    "MultiRename"   : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py",
 }
+
+SCRIPT_NAME = [
+    "Construct",
+    "UVAlign",
+    "MultiRename"
+]
 
 QTUI_PATH = {
     "MultiRename"   :"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/qtui/multiRename.ui"
@@ -89,8 +95,6 @@ class _shelf():
 
 class FishShelf(_shelf):
     def downloadScriptsFromGitHub(self, name):
-
-
         raw = url.urlopen(SCRIPT_PATH[name]).read()
         text_decode = raw.decode("utf-8")
         return text_decode
@@ -118,7 +122,7 @@ class FishShelf(_shelf):
 
 
             # スクリプトのダウンロード
-            for name in SCRIPT_PATH:
+            for name in SCRIPT_NAME:
                 prog += 1
                 mc.progressWindow(edit = True, progress = prog, status = "Loading Script: " + name)
                 self.addButon(name, command = self.downloadScriptsFromGitHub(name))
