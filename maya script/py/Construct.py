@@ -102,7 +102,7 @@ class FishShelf(_shelf):
 
     def build(self):
         ReconstructCmd = self.downloadScriptsFromGitHub("Construct")
-        print(ReconstructCmd)
+        #print(ReconstructCmd)
         if ReconstructCmd == "":
             mc.error("Contruct Error")
             return False

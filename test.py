@@ -1,41 +1,18 @@
-import maya.cmds as cmds
+import signal
+import time
 
-# +-+------------------+
-# |-|  Doing Nothing   |
-# +--------------------+
-# | Sleeping: 40%      |
-# |                    |
-# | +----------------+ |
-# | |||||||          | |
-# | +----------------+ |
-# |                    |
-# | Hit ESC to Cancel  |
-# +--------------------+
+def signal_handler(signum, frame):
+    raise Exception("Timed out!")
 
-# Always use the progress dialog from a script, never directly
-# from the Script Editor.
-
-def myFun():
-    amount = 0
-    cmds.progressWindow(	title='Doing Nothing',
-                        progress=amount,
-                        status='Sleeping: 0%',
-                        isInterruptable=True )
-    while True :
-        # Check if the dialog has been cancelled
-        if cmds.progressWindow( query=True, isCancelled=True ) :
-            break
-
-        # Check if end condition has been reached
-        if cmds.progressWindow( query=True, progress=True ) >= 100 :
-            break
-
-        amount += 5
-
-        cmds.progressWindow( edit=True, progress=amount, status=('Sleeping: ' + `amount` + '%' ) )
-
-        cmds.pause( seconds=1 )
-
-    cmds.progressWindow(endProgress=1)
-
-myFun()
+def main():
+    
+    signal.signal( signal.SIGALRM, signal_handler )
+    signal.alarm( 5 ) # 5 seconds alarm 
+    try:
+        your_method_here() # Your function. 
+        signal.alarm(0) # make it disable alarm. 
+    except Exception:
+        print ("Timed out!")
+        
+if __name__ == '__main__':
+    main()

@@ -2,12 +2,17 @@ import maya.cmds as mc
 import maya.mel as mel
 import math
 import sys
+import time
 sys.setrecursionlimit(5000)
 #---------------------------OPTION------------------------------#
-OPTION_MINDOT = 0.707
+''' ドット演算の閾値 '''
+OPTION_MINDOT = 0.707   
 #---------------------------OPTION------------------------------#
 
 #---------------------------関数定義------------------------------#
+def signal_handler(signum, frame):
+    raise Exception("Time Out")
+
 def dot(vec1, vec2):
     return vec1[0] * vec2[0] + vec1[1] * vec2[1]
 
@@ -92,6 +97,10 @@ def doAlign(_pivot, mode = 0):
         for dirV2 in verticalDir:
             nextUV, nextDirV2 = findUVinLine(_pivot, dirV2)
             while nextUV != -1 and nextDirV2 != -1:
+                # 方向がループしている場合、中止
+                if nextUV in verticalUVList:
+                    return False
+
                 verticalUVList.append(nextUV)
                 nextUV, nextDirV2 = findUVinLine(nextUV, nextDirV2)
         
@@ -104,6 +113,10 @@ def doAlign(_pivot, mode = 0):
         for dirV2 in horizentalDir:
             nextUV, nextDirV2 = findUVinLine(_pivot, dirV2)
             while nextUV != -1 and nextDirV2 != -1:
+                # 方向がループしている場合、中止
+                if nextUV in horizentalUVList:
+                    return False
+
                 horizentalUVList.append(nextUV)
                 nextUV, nextDirV2 = findUVinLine(nextUV, nextDirV2)
 
@@ -123,6 +136,9 @@ def alignUV(_pivot):
     horizentalUVList = []
     verticalUVList, a   = doAlign(_pivot, 0)
     a, horizentalUVList = doAlign(_pivot, 1)
+
+    if verticalUVList == False or horizentalUVList == False:
+        return False
 
     # 進捗状況を表示する
     UVAmount = len(verticalUVList) + len(horizentalUVList) - 2
@@ -160,8 +176,6 @@ verticalDir = [[0, 1], [0, -1]]
 horizentalDir = [[1, 0], [-1, 0]]
 # UVShellに含めているUVを取得する
 uvList_Shell = flatten(mc.polyListComponentConversion(pivot, tuv = True, uvShell = True))
-# 整列完了の頂点
-isAlignedList = [pivot[0]]
 
 isDone = alignUV(pivot[0])
 mc.progressWindow(title = "UVAlign", endProgress = True)
