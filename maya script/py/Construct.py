@@ -89,6 +89,8 @@ class _shelf():
 
 class FishShelf(_shelf):
     def downloadScriptsFromGitHub(self, name):
+
+
         raw = url.urlopen(SCRIPT_PATH[name]).read()
         text_decode = raw.decode("utf-8")
         return text_decode
@@ -108,11 +110,27 @@ class FishShelf(_shelf):
             return False
         else:
             self._cleanOldShelf()
-            
-            self.addButon("Reconstruct", command = self.downloadScriptsFromGitHub("Construct"))
 
-            self.downloadQTUIFromGitHub("MultiRename")
-            self.addButon("MultiRename", command = self.downloadScriptsFromGitHub("MultiRename"))
-            
-            self.addButon("UVAlign", command = self.downloadScriptsFromGitHub("UVAlign"))
+            progressAmount = len(SCRIPT_PATH) + len(QTUI_PATH)
+            prog = 0
+
+            mc.progressWindow(title = "Construct", progress = 0, max = progressAmount, status = "Loading")
+
+
+            # スクリプトのダウンロード
+            for name in SCRIPT_PATH:
+                prog += 1
+                mc.progressWindow(edit = True, progress = prog, status = "Loading Script: " + name)
+                self.addButon(name, command = self.downloadScriptsFromGitHub(name))
+
+
+            # QTUIのダウンロード
+            for name in QTUI_PATH:
+                prog += 1
+                mc.progressWindow(edit = True, progress = prog, status = "Loading QTUI: " + name)
+
+                self.downloadQTUIFromGitHub(name)
+
+            mc.progressWindow( endProgress = True)
+
 FishShelf()
