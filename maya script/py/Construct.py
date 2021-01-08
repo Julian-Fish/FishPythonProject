@@ -1,7 +1,7 @@
 import maya.cmds as mc
 import urllib as url
 
-Path = ""
+PathListURL = "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/PathList.py"
 
 def _null(*args):
     pass
@@ -93,34 +93,34 @@ class FishShelves(_shelf):
         f.close()
 
     def build(self):
-        ReconstructCmd = self.downloadScriptsFromGitHub("Construct")
-        #print(ReconstructCmd)
-        if ReconstructCmd == "":
-            mc.error("Contruct Error")
-            return False
-        else:
-            self._cleanOldShelf()
+        # パスリストの読み込み
+        pathListCmd = url.urlopen(PathListURL).read()
+        if pathListCmd == "":
+            mc.error("Download Error")
+            return "Download Error"
 
-            progressAmount = len(SCRIPT_PATH) + len(QTUI_PATH)
-            prog = 0
+        exec(pathListCmd)
+        self._cleanOldShelf()
 
-            mc.progressWindow(title = "Construct", progress = 0, max = progressAmount, status = "Loading")
+        progressAmount = len(SCRIPT_PATH) + len(QTUI_PATH)
+        prog = 0
 
+        mc.progressWindow(title = "Construct", progress = 0, max = progressAmount, status = "Loading")
 
-            # スクリプトのダウンロード
-            for name in SCRIPT_NAME:
-                prog += 1
-                mc.progressWindow(edit = True, progress = prog, status = "Loading Script: " + name)
-                self.addButon(name, command = self.downloadScriptsFromGitHub(name))
+        # スクリプトのダウンロード
+        for name in SCRIPT_NAME:
+            prog += 1
+            mc.progressWindow(edit = True, progress = prog, status = "Loading Script: " + name)
+            self.addButon(name, command = self.downloadScriptsFromGitHub(name))
 
+        # QTUIのダウンロード
+        for name in QTUI_PATH:
+            prog += 1
+            mc.progressWindow(edit = True, progress = prog, status = "Loading QTUI: " + name)
 
-            # QTUIのダウンロード
-            for name in QTUI_PATH:
-                prog += 1
-                mc.progressWindow(edit = True, progress = prog, status = "Loading QTUI: " + name)
+            self.downloadQTUIFromGitHub(name)
 
-                self.downloadQTUIFromGitHub(name)
+        mc.progressWindow( endProgress = True)
+        return "Construct Success"
 
-            mc.progressWindow( endProgress = True)
-
-FishShelves()
+print FishShelves()
