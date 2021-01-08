@@ -20,9 +20,14 @@ class _shelf():
         self.labelBackground = (0, 0, 0, 0)
         self.labelColour = (.9, .9, .9)
 
+        self.melPath = mc.internalVar(userShelfDir = True) + name + "/"
+        self.qtuiPath = melPath + "qtui/"
+
         #self._cleanOldShelf()
-        self.build()
+        buildResult = self.build()
         mc.setParent(self.name)
+
+        return BuildResult
 
     def build(self):
         '''This method should be overwritten in derived classes to actually build the shelf
@@ -87,7 +92,7 @@ class FishShelf(_shelf):
 
     def downloadQTUIFromGitHub(self, name):
         uiText = url.urlopen(QTUI_PATH[name]).read()
-        fileName = mc.workspace(fullName = True) + "/qtui/" + name + ".ui"
+        fileName = self.qtuiPath + name + ".ui"
         f = open(fileName, "w")   
         f.write(uiText)
         f.close()
