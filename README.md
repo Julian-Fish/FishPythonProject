@@ -19,6 +19,7 @@ A、Bから一つ選んでください
 ①![Zipファイル](https://github.com/Julian-Fish/FishPythonProject/raw/master/maya%20script/zip/FishShelf.zip)
 をダウンロードして、Mayaのユーザ シェルフ ディレクトリに解凍する
 
+
 ②スクリプト「maya.mel.eval('loadNewShelf "FishShelf/FishShelf.mel"')」を実行して完成
 
 ※ ユーザ シェルフ ディレクトリがわからない場合、スクリプト「print cmds.internalVar(ush=True)」を実行したら出力する
