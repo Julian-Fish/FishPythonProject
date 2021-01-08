@@ -21,7 +21,12 @@ class _shelf():
         self.labelColour = (.9, .9, .9)
 
         self.melPath = mc.internalVar(userShelfDir = True) + name + "/"
+        if not os.path.exists(self.melPath):   
+            os.mkdir(self.melPath)
+
         self.qtuiPath = self.melPath + "qtui/"
+        if not os.path.exists(self.qtuiPath):   
+            os.mkdir(self.qtuiPath)
 
         #self._cleanOldShelf()
         buildResult = self.build()
@@ -93,18 +98,12 @@ class FishShelf(_shelf):
     def downloadQTUIFromGitHub(self, name):
         uiText = url.urlopen(QTUI_PATH[name]).read()
         fileName = self.qtuiPath + name + ".ui"
+        print fileName
         f = open(fileName, "w")   
         f.write(uiText)
         f.close()
 
     def build(self):
-        # パスリストの読み込み
-        pathListCmd = url.urlopen(PathListURL).read()
-        if pathListCmd == "":
-            mc.error("Download Error")
-            return "Construct Fail. Download Error."
-
-        exec(pathListCmd)
         self._cleanOldShelf()
 
         progressAmount = len(SCRIPT_PATH) + len(QTUI_PATH)
@@ -128,4 +127,11 @@ class FishShelf(_shelf):
         mc.progressWindow( endProgress = True)
         return "Construct Success"
 
-print FishShelf()
+# main
+# パスリストの読み込み
+pathListCmd = url.urlopen(PathListURL).read()
+if pathListCmd == "":
+    mc.error("Download Error")
+else:
+    exec(pathListCmd)
+    print FishShelf()
