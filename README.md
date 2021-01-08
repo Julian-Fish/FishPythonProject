@@ -5,7 +5,7 @@ Maya Python Script Learning
 
 A、Bから一つ選んでください
 
-### A)ネットでダウンロード：
+### A)ネットでダウンロードする：
 
 ![Construct](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py)
 のコードをMayaのScript EditorにPythonとして実行する
