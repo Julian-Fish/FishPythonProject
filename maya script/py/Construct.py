@@ -21,7 +21,7 @@ class _shelf():
         self.labelColour = (.9, .9, .9)
 
         self.melPath = mc.internalVar(userShelfDir = True) + name + "/"
-        self.qtuiPath = melPath + "qtui/"
+        self.qtuiPath = self.melPath + "qtui/"
 
         #self._cleanOldShelf()
         buildResult = self.build()
