@@ -12,7 +12,7 @@ class _shelf():
     it should be extended by the derived class to build the necessary shelf elements.
     By default it creates an empty shelf called "customShelf".'''
 
-    def __init__(self, name="FishShelves", iconPath=""):
+    def __init__(self, name="FishShelf", iconPath=""):
         self.name = name
 
         self.iconPath = iconPath
@@ -79,7 +79,7 @@ class _shelf():
 # customShelf()
 ###################################################################################
 
-class FishShelves(_shelf):
+class FishShelf(_shelf):
     def downloadScriptsFromGitHub(self, name):
         raw = url.urlopen(SCRIPT_PATH[name]).read()
         text_decode = raw.decode("utf-8")
@@ -97,7 +97,7 @@ class FishShelves(_shelf):
         pathListCmd = url.urlopen(PathListURL).read()
         if pathListCmd == "":
             mc.error("Download Error")
-            return "Download Error"
+            return "Construct Fail. Download Error."
 
         exec(pathListCmd)
         self._cleanOldShelf()
@@ -123,4 +123,4 @@ class FishShelves(_shelf):
         mc.progressWindow( endProgress = True)
         return "Construct Success"
 
-print FishShelves()
+print FishShelf()
