@@ -1,21 +1,7 @@
 import maya.cmds as mc
 import urllib as url
 
-SCRIPT_PATH = {
-    "Construct"     : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py", 
-    "UVAlign"       : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/UVAlignVer2.py", 
-    "MultiRename"   : "https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py",
-}
-
-SCRIPT_NAME = [
-    "Construct",
-    "UVAlign",
-    "MultiRename"
-]
-
-QTUI_PATH = {
-    "MultiRename"   :"https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/qtui/multiRename.ui"
-}
+Path = ""
 
 def _null(*args):
     pass
@@ -26,7 +12,7 @@ class _shelf():
     it should be extended by the derived class to build the necessary shelf elements.
     By default it creates an empty shelf called "customShelf".'''
 
-    def __init__(self, name="FishShelf", iconPath=""):
+    def __init__(self, name="FishShelves", iconPath=""):
         self.name = name
 
         self.iconPath = iconPath
@@ -93,7 +79,7 @@ class _shelf():
 # customShelf()
 ###################################################################################
 
-class FishShelf(_shelf):
+class FishShelves(_shelf):
     def downloadScriptsFromGitHub(self, name):
         raw = url.urlopen(SCRIPT_PATH[name]).read()
         text_decode = raw.decode("utf-8")
@@ -137,4 +123,4 @@ class FishShelf(_shelf):
 
             mc.progressWindow( endProgress = True)
 
-FishShelf()
+FishShelves()
