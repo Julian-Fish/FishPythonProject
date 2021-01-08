@@ -21,7 +21,7 @@ A、Bから一つ選んでください
 
 ②スクリプト「maya.mel.eval('loadNewShelf "FishShelf/FishShelf.mel"')」を実行して完成
 
-※ ユーザ シェルフ ディレクトリは、スクリプト「print cmds.internalVar(ush=True)」を実行したら出力されます
+※ ユーザ シェルフ ディレクトリがわからない場合、スクリプト「print cmds.internalVar(ush=True)」を実行したら出力する
 
 ![install_local](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/install/install_local.png)
 
