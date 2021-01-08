@@ -28,11 +28,11 @@ class _shelf():
         if not os.path.exists(self.qtuiPath):   
             os.mkdir(self.qtuiPath)
 
+
+
         #self._cleanOldShelf()
         buildResult = self.build()
         mc.setParent(self.name)
-
-        return BuildResult
 
     def build(self):
         '''This method should be overwritten in derived classes to actually build the shelf
@@ -134,4 +134,8 @@ if pathListCmd == "":
     mc.error("Download Error")
 else:
     exec(pathListCmd)
-    print FishShelf()
+    _fishShelf = FishShelf()
+    print _fishShelf
+
+    if mc.shelfLayout(_fishShelf.name, query = 1, ex = 1):
+        mc.saveShelf( _fishShelf.name, (shelfPath + SHELF_NAME) )
