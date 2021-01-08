@@ -1,7 +1,11 @@
 # FishPythonProject
 Maya Python Script Learning
 
-## インストール方法（初期化）：
+## インストール方法：
+
+A、Bから一つ選んでください
+
+### A)ネットでダウンロード：
 
 ![Construct](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py)
 のコードをMayaのScript EditorにPythonとして実行する
@@ -10,14 +14,17 @@ Maya Python Script Learning
 
 ※ インターネット環境が必須
 
+### B)ローカルから読み込む：
+
+![Zipファイル](https://github.com/Julian-Fish/FishPythonProject/raw/master/maya%20script/zip/FishShelf.zip)
+をダウンロードして、Mayaのユーザ シェルフ ディレクトリに解凍する
+
+ユーザ シェルフ ディレクトリの調べる方法
+
+GIF画像
 
 ## スクリプトの機能：
 
-### ![Construct](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py) シェルフの更新
-
-リポジトリからスクリプトを読み込み、シェルフを更新する
-
-![ConstructGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/Construct/construct.gif)
 
 ### ![MultiRename](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py) 名前一括変更
 
@@ -30,3 +37,12 @@ Maya Python Script Learning
 選択しているUV頂点のシェールを格子状に整列する
 
 ![MultiRenameGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/UVAlign/UVAlign.gif)
+
+### ![Construct](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py) シェルフの更新
+
+シェルフを更新する
+
+※ インターネット環境が必須
+
+![ConstructGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/Construct/construct.gif)
+
