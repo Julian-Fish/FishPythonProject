@@ -1,9 +1,15 @@
-import maya.cmds as mc
+import urllib.request
+import urllib.parse
+data = {}
+data['name'] = 'Somebody Here'
+data['location'] = 'Northampton'
+data['language'] = 'Python'
+url_values = urllib.parse.urlencode(data)
+print(url_values)  # The order may differ from below.  
 
-pivot = mc.ls(selection = True)
-pivot = mc.polyListComponentConversion(pivot, tuv = True)
-# 最初の方向（上下左右）
-verticalDir = [[0, 1], [0, -1]]
-horizentalDir = [[1, 0], [-1, 0]]
-# UVShellに含めているUVを取得する
-uvList_Shell = flatten(mc.polyListComponentConversion(pivot, tuv = True, uvShell = True))
+url = 'https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py'
+full_url = url + '?' + url_values
+data = urllib.request.urlopen(full_url)
+text = data.read()
+
+print(text)
