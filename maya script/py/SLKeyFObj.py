@@ -2,6 +2,7 @@
 import maya.cmds as mc
 
 slObjList = []
+keyFObjList = []
 slObjList = mc.ls(sl = 1, flatten = 1)
 
 print slObjList
@@ -11,9 +12,9 @@ for obj in slObjList:
     keyIndex = mc.keyframe(obj, query = 1, indexValue = 1)
     print keyIndex
     # キーフレームがない場合、リストから除く
-    if keyIndex == None:
-        slObjList.remove(obj)
-        #print obj + "without keyFrame"
+    if keyIndex != None:
+        keyFObjList.append(obj)
+        print obj + " has keyFrame"
 
-mc.select(slObjList)
-print slObjList
+mc.select(keyFObjList)
+print keyFObjList
