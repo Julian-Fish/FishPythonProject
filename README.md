@@ -5,7 +5,7 @@ Maya Python Script Learning
 
 A、Bから一つ選んでください
 
-### A)ネットでダウンロード：
+### A)ネットでダウンロードする：
 
 ![Construct](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py)
 のコードをMayaのScript EditorにPythonとして実行する
@@ -16,15 +16,17 @@ A、Bから一つ選んでください
 
 ### B)ローカルから読み込む：
 
-![Zipファイル](https://github.com/Julian-Fish/FishPythonProject/raw/master/maya%20script/zip/FishShelf.zip)
+①![Zipファイル](https://github.com/Julian-Fish/FishPythonProject/raw/master/maya%20script/zip/FishShelf.zip)
 をダウンロードして、Mayaのユーザ シェルフ ディレクトリに解凍する
 
-ユーザ シェルフ ディレクトリの調べる方法
 
-GIF画像
+②スクリプト「maya.mel.eval('loadNewShelf "FishShelf/FishShelf.mel"')」を実行して完成
+
+※ ユーザ シェルフ ディレクトリがわからない場合、スクリプト「print cmds.internalVar(ush=True)」を実行したら出力する
+
+![install_local](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/install/install_local.png)
 
 ## スクリプトの機能：
-
 
 ### ![MultiRename](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/multiRename.py) 名前一括変更
 
