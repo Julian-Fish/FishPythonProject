@@ -3,7 +3,8 @@
 
 import maya.cmds as mc
 
-MELFILE_NAME = "shelf_FishShelf"
+SHELF_NAME = "FishShelf"
+MEL_NAME = "shelf_FishShelf"
 
 shelfPath = mc.internalVar( userShelfDir = True ) + SHELF_NAME + "/"
 print shelfPath
@@ -12,4 +13,4 @@ if not os.path.exists(shelfPath):
     os.mkdir(shelfPath)
 
 if mc.shelfLayout(SHELF_NAME, query = 1, ex = 1):
-    mc.saveShelf( SHELF_NAME, (shelfPath + SHELF_NAME) )
+    mc.saveShelf( SHELF_NAME, (shelfPath + MEL_NAME) )
