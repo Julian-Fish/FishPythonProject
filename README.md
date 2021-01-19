@@ -14,17 +14,16 @@ A、Bから一つ選んでください
 
 ※ インターネット環境が必須
 
-### B)ローカルから読み込む：
+### B)ローカルでインストール（Windows）：
 
-①![Zipファイル](https://github.com/Julian-Fish/FishPythonProject/raw/master/maya%20script/zip/FishShelf.zip)
-をダウンロードして、Mayaのユーザ シェルフ ディレクトリに解凍する
+①![Zipファイル](https://github.com/Julian-Fish/FishPythonProject/raw/master/maya%20script/WindowsInstall.zip)
+をダウンロードし、解凍する（どこでもいい）
 
+②解凍できたフォルダに「InstallFishShelf.bat」というバッチファイルを実行する
 
-②スクリプト「maya.mel.eval('loadNewShelf "FishShelf/FishShelf.mel"')」を実行して完成
+③MayaでPythonコード「maya.mel.eval('loadNewShelf "FishShelf/FishShelf.mel"')」を実行したら完成
 
-※ ユーザ シェルフ ディレクトリがわからない場合、スクリプト「print cmds.internalVar(ush=True)」を実行したら出力する
-
-![install_local](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/install/install_local.png)
+<!-- ![install_local](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/install/install_local.png) -->
 
 ## スクリプトの機能：
 
