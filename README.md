@@ -40,6 +40,7 @@ A、Bから一つ選んでください
 
 ![MultiRenameGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/UVAlign/UVAlign.gif)
 
+<!--
 ### ![Construct](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py) シェルフの更新
 
 シェルフを更新する
@@ -47,4 +48,4 @@ A、Bから一つ選んでください
 ※ インターネット環境が必須
 
 ![ConstructGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/Construct/construct.gif)
-
+-->
