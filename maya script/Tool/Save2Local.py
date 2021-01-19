@@ -3,7 +3,7 @@
 
 import maya.cmds as mc
 
-SHELF_NAME = "FishShelf"
+MELFILE_NAME = "shelf_FishShelf"
 
 shelfPath = mc.internalVar( userShelfDir = True ) + SHELF_NAME + "/"
 print shelfPath

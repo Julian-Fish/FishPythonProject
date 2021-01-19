@@ -29,7 +29,6 @@ class _shelf():
             os.mkdir(self.qtuiPath)
 
 
-
         #self._cleanOldShelf()
         buildResult = self.build()
         mc.setParent(self.name)
@@ -39,14 +38,14 @@ class _shelf():
         elements. Otherwise, nothing is added to the shelf.'''
         pass
 
-    def addButon(self, label, icon="commandButton.png", command=_null, doubleCommand=_null):
+    def addButon(self, label, icon="commandButton.png", command="", doubleCommand=""):
         '''Adds a shelf button with the specified label, command, double click command and image.'''
         mc.setParent(self.name)
         if icon:
             icon = self.iconPath + icon
         mc.shelfButton(width=37, height=37, image=icon, l=label, command=command, dcc=doubleCommand, imageOverlayLabel=label, olb=self.labelBackground, olc=self.labelColour)
 
-    def addMenuItem(self, parent, label, command=_null, icon=""):
+    def addMenuItem(self, parent, label, command="", icon=""):
         '''Adds a shelf button with the specified label, command, double click command and image.'''
         if icon:
             icon = self.iconPath + icon
@@ -135,7 +134,8 @@ if pathListCmd == "":
 else:
     exec(pathListCmd)
     _fishShelf = FishShelf()
-    print _fishShelf
+    # print _fishShelf
 
-    if mc.shelfLayout(_fishShelf.name, query = 1, ex = 1):
-        mc.saveShelf( _fishShelf.name, (shelfPath + SHELF_NAME) )
+    # melファイルの保存
+    #if mc.shelfLayout(_fishShelf.name, query = 1, ex = 1):
+        #mc.saveShelf( _fishShelf.name, (_fishShelf.melPath + _fishShelf.name) )
