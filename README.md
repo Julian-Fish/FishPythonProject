@@ -5,7 +5,7 @@ Maya Python Script Learning
 
 A、Bから一つ選んでください
 
-### A)ネットでダウンロードする：
+### A)ネットでダウンロードする（おすすめ）：
 
 ![Construct](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py)
 のコードをMayaのScript EditorにPythonとして実行する
@@ -32,7 +32,13 @@ A、Bから一つ選んでください
 
 選択しているオブジェクトの名前の接頭辞と接尾辞を特定のパータンに一括で変更する
 
+<details>
+<summary>Gif画像</summary>
+  
 ![MultiRenameGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/multiRename/multiRename.gif)
+
+</details>
+
 
 ### ![UVAlign](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/UVAlignVer2.py) UV整列（格子状）
 
@@ -40,6 +46,11 @@ A、Bから一つ選んでください
 
 ![MultiRenameGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/UVAlign/UVAlign.gif)
 
+### ![SLKeyFObj]() キーフレームがあるオブジェクトの選択
+
+選択しているオブジェクトの中に、キーフレームが設置されたオブジェクトを洗い出す
+
+![SLKeyFObjGif](https://github.com/Julian-Fish/FishPythonProject/blob/master/gif/SLKeyFObj/SLKeyFObj.gif)
 <!--
 ### ![Construct](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py) シェルフの更新
 
