@@ -8,7 +8,7 @@ SCRIPT_PATH = {
 SCRIPT_NAME = [
     "Construct",
     "UVAlign",
-    "MultiRename"
+    "MultiRename",
     "SLKeyFObj"
 ]
 
