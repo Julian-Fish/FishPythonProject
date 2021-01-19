@@ -1,11 +1,11 @@
 # FishPythonProject
-Maya Python Script Learning
+Maya version: 2019
 
 ## インストール方法：
 
 A、Bから一つ選んでください
 
-### A)ネットでダウンロードする（おすすめ）：
+### A)ネットでダウンロードする：
 
 ![Construct](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/Construct.py)
 のコードをMayaのScript EditorにPythonとして実行する
@@ -17,9 +17,11 @@ A、Bから一つ選んでください
 ### B)ローカルでインストール（Windows）：
 
 ①![Zipファイル](https://github.com/Julian-Fish/FishPythonProject/raw/master/maya%20script/WindowsInstall.zip)
-をダウンロードし、解凍する（どこでもいい）
+をダウンロードする
 
-②解凍できたフォルダに「InstallFishShelf.bat」というバッチファイルを実行する
+②ZIPファイルを<ユーザ シェルフ ディレクトリ>まで解凍する
+
+※ <ユーザ シェルフ ディレクトリ>が設定しなかった場合、ディフォルトのDocuments\maya\2019\prefs\shelvesになる
 
 ③MayaでPythonコード「maya.mel.eval('loadNewShelf "FishShelf/FishShelf.mel"')」を実行したら完成
 
