@@ -1,1 +1,1 @@
-maya.mel.eval('loadNewShelf "FishShelf/FishShelf.mel"')
+maya.mel.eval('loadNewShelf "FishShelf/shelf_FishShelf.mel"')
