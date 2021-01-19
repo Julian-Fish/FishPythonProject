@@ -32,13 +32,7 @@ A、Bから一つ選んでください
 
 選択しているオブジェクトの名前の接頭辞と接尾辞を特定のパータンに一括で変更する
 
-<details>
-<summary>Gif画像</summary>
-  
 ![MultiRenameGif](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/gif/multiRename/multiRename.gif)
-
-</details>
-
 
 ### ![UVAlign](https://raw.githubusercontent.com/Julian-Fish/FishPythonProject/master/maya%20script/py/UVAlignVer2.py) UV整列（格子状）
 
