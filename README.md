@@ -16,7 +16,7 @@ A、Bから一つ選んでください
 
 ### B)ローカルでインストール（Windows）：
 
-①![Zipファイル](https://github.com/Julian-Fish/FishPythonProject/raw/master/maya%20script/WindowsInstall.zip)
+①![Zipファイル](https://github.com/Julian-Fish/FishPythonProject/raw/master/FishShelf.zip)
 をダウンロードする
 
 ②ZIPファイルを<ユーザ シェルフ ディレクトリ>まで解凍する
