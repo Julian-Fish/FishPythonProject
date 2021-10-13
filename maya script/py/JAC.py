@@ -41,37 +41,37 @@ for row, rowData in enumerate(ws.values):
 tableWidget.show()
 #find item
 tableWidget.setItemSelected(item, 1)
-# =============================================================================
-# #newSheet = "kadai01"
-# #ws = wb.create_sheet(newSheet)
-# uuidCol = ws["C"]
-# i = 0
-# for row in ws.iter_rows(min_row = 1):
-#     if row[0].value is None:
-#         #file end
-#         #print "End"
-#         break
-#     num = row[0].value
-#     name = row[1].value
-#     fileName = num + " " + name
-#     #create jac empty group
-#     jac = mc.group(em=True, name="JAC")
-#     uuid = mc.ls("JAC", uuid=1)
-#     uuidCol[i].value = uuid[0].encode("ascii", "ignore")
-#     i += 1
-#     #hiden jac empty group
-#     mc.setAttr("JAC.hiddenInOutliner", True)
-#     mc.outlinerEditor("outlinerPanel1", edit = True, refresh = True)
-#     #lock jac, save and copy map file
-#     mc.lockNode("JAC", lock = 1)
-#     mel.eval("file -save")
-#     originMapName = "map1.mb"
-#     originMapDir = workRootDir + "scenes/" + originMapName
-#     targetMapDir = workRootDir + "scenes/" + fileName + ".mb"
-#     shutil.copy(originMapDir, targetMapDir)
-#     #unlock and delete jac
-#     mc.lockNode("JAC", lock = 0)
-#     mc.delete(jac)
-# #save excel
-# wb.save(workRootDir + "test.xlsx")
-# =============================================================================
+=============================================================================
+#newsheet = "kadai01"
+#ws = wb.create_sheet(newsheet)
+uuidcol = ws["c"]
+i = 0
+for row in ws.iter_rows(min_row = 1):
+    if row[0].value is none:
+        #file end
+        #print "end"
+        break
+    num = row[0].value
+    name = row[1].value
+    filename = num + " " + name
+    #create jac empty group
+    jac = mc.group(em=true, name="jac")
+    uuid = mc.ls("jac", uuid=1)
+    uuidcol[i].value = uuid[0].encode("ascii", "ignore")
+    i += 1
+    #hiden jac empty group
+    mc.setattr("jac.hiddeninoutliner", true)
+    mc.outlinereditor("outlinerpanel1", edit = true, refresh = true)
+    #lock jac, save and copy map file
+    mc.locknode("jac", lock = 1)
+    mel.eval("file -save")
+    originmapname = "map1.mb"
+    originmapdir = workrootdir + "scenes/" + originmapname
+    targetmapdir = workrootdir + "scenes/" + filename + ".mb"
+    shutil.copy(originmapdir, targetmapdir)
+    #unlock and delete jac
+    mc.locknode("jac", lock = 0)
+    mc.delete(jac)
+#save excel
+wb.save(workrootdir + "test.xlsx")
+=============================================================================
