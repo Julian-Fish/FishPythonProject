@@ -1,19 +1,80 @@
 # -*- coding: utf-8 -*-
 from PySide2 import QtWidgets
 from PySide2.QtWidgets import *
-from PySide2 import QtGui
+from PySide2.QtGui import *
+from PySide2.QtCore import *
 from PySide2.QtUiTools import QUiLoader
+
 from openpyxl import Workbook, load_workbook
+
 from maya.app.general.mayaMixin import MayaQWidgetBaseMixin
 import maya.cmds as mc
-import shutil
 import maya.mel as mel
+import maya.utils as mu
+import shutil
+import time
 
 # 間接パスの指定
 UIFILEPATH = "D:/19cu0217/FishPythonProject/maya script/qtui/JAC_lockNode.ui"
 workRootDir = mc.workspace(q = 1, rootDirectory = 1)
 
 print workRootDir
+
+class CopyWork(QObject):
+    finished = Signal()
+    progress = Signal(int)
+    def __init__(self, table, count, parent=None):
+        super(CopyWork, self).__init__(parent)
+        
+        self.count = count
+        self.table = table
+
+    def copyMap(self):
+        #generate authorStr
+        for i in range(0, self.count):
+            mu.executeInMainThreadWithResult(self.doInMain)
+            self.progress.emit(i + 1)
+            #time.sleep(0.1)
+        self.finished.emit()
+        
+    def doInMain(self):
+        number = self.table[i][0]
+        name = self.table[i][1]
+        authorStr = number + name
+        
+        # 1.add author to attribute
+        # #create author node and set hidden
+        # authorNode = mc.group(em = 1, name = "AuthorNode")
+        # mc.setAttr("AuthorNode.hiddenInOutliner", True)
+        # #add attr and lock it
+        # mc.addAttr("AuthorNode", longName = "Author", dataType = "string")
+        # mc.setAttr("AuthorNode.Author", authorStr, type = "string")
+        # mc.setAttr("AuthorNode.Author", lock = 1)
+        
+        # 2.add author(number) to group name
+        # create author node and set hidden
+        groupName = "Author_" + number
+        authorNode = mc.group(em = 1, name = groupName)
+        mc.setAttr(groupName + ".hiddenInOutliner", True)
+        
+        #lock node
+        mc.lockNode(authorNode, lock = 1)
+        #fresh outliner
+        mc.outlinerEditor("outlinerPanel1", edit = 1, refresh = 1)
+        
+        #save and copy map
+        mel.eval("file -save")
+        originMapName = "origin.mb"
+        targetMapName = authorStr
+        originMap = workRootDir + "scenes/" + originMapName
+        targetMap = workRootDir + "scenes/" + targetMapName + ".mb"
+        shutil.copy(originMap, targetMap)
+        
+        #unlock and delete node
+        mc.lockNode(authorNode, lock = 0)
+        mc.delete(authorNode)
+        
+        return groupName
 
 ## MainWindowを作るクラス
 class MainWindow(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
@@ -78,57 +139,47 @@ class MainWindow(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
     
     def copyMap(self):
         ws = self.wb[self.wb.sheetnames[0]]
-        count = 0
+        self.count = 0
         for row in ws.values:
             if row[0] is None:
                 #file end
                 break
-            #generate authorStr
-            authorStr = row[0] + row[1]
-            
-            # 1.add author to attribute
-            # #create author node and set hidden
-            # authorNode = mc.group(em = 1, name = "AuthorNode")
-            # mc.setAttr("AuthorNode.hiddenInOutliner", True)
-            # #add attr and lock it
-            # mc.addAttr("AuthorNode", longName = "Author", dataType = "string")
-            # mc.setAttr("AuthorNode.Author", authorStr, type = "string")
-            # mc.setAttr("AuthorNode.Author", lock = 1)
-            
-            # 2.add author(number) to group name
-            # create author node and set hidden
-            groupName = "Author_" + row[0]
-            print groupName
-            authorNode = mc.group(em = 1, name = groupName)
-            mc.setAttr("AuthorNode.hiddenInOutliner", True)
-            
-            #lock node
-            mc.lockNode(authorNode, lock = 1)
-            #fresh outliner
-            mc.outlinerEditor("outlinerPanel1", edit = 1, refresh = 1)
-            
-            #save and copy map
-            mel.eval("file -save")
-            originMapName = "origin.mb"
-            targetMapName = authorStr
-            originMap = workRootDir + "scenes/" + originMapName
-            targetMap = workRootDir + "scenes/" + targetMapName + ".mb"
-            shutil.copy(originMap, targetMap)
-            
-            #unlock and delete node
-            mc.lockNode(authorNode, lock = 0)
-            mc.delete(authorNode)
-            count += 1
-            
-        self.copyCount = str(count)
-        self.copyDone()
+            self.count += 1
         
+        self.ProgressDialog = QProgressDialog("Copying Map", "Close", 0, self.count)
+        self.ProgressDialog.setWindowTitle("Copy Progress")
+        self.ProgressDialog.show()
+        table = tuple(ws.values)
+        
+        #set operation thread
+        self.thread = QThread()
+        self.copyWork = CopyWork(table, self.count)
+        # self.copyWork.copyMap()  # run without thread
+        
+        self.copyWork.moveToThread(self.thread)
+        self.copyWork.progress.connect(self.emitProgress)
+        self.copyWork.finished.connect(self.copyDone)
+        self.copyWork.finished.connect(self.thread.quit)
+        self.copyWork.finished.connect(self.copyWork.deleteLater)
+
+        self.thread.started.connect(self.copyWork.copyMap)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.start()
+    
+    def emitProgress(self, p):
+        self.copiedCountStr = str(p)
+        label = self.copiedCountStr + "/" + str(self.count)
+        self.ProgressDialog.setLabelText("Copying Map: " + label)
+        self.ProgressDialog.setValue(p)
+        
+    
     def copyDone(self):
+        print "copy done"
         msgBox = QMessageBox()
         msgBox.setWindowTitle("Done")
         msgBox.setText(r"<b>Copy Done<b>")
-        msgBox.setTextFormat(QtGui.Qt.RichText)
-        msgBox.setInformativeText(self.copyCount + " Map Copied.")
+        msgBox.setTextFormat(Qt.RichText)
+        msgBox.setInformativeText(self.copiedCountStr + " Map Copied.")
         #msgBox.setDetailedText(self.copyCount + " Map Copied.")
         msgBox.addButton(QMessageBox.Ok)
         
