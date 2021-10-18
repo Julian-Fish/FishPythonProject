@@ -1,77 +1,240 @@
-'''
-import maya.cmds as mc
+# -*- coding: utf-8 -*-
+from PySide2 import QtWidgets
+from PySide2.QtWidgets import *
+from PySide2.QtGui import *
+from PySide2.QtCore import *
+from PySide2.QtUiTools import QUiLoader
+
 from openpyxl import Workbook, load_workbook
-#load excel
-workRootDir = mc.workspace(q = 1, rootDirectory = 1)
-wb = load_workbook(workRootDir + "test.xlsx")
-ws = wb["kadai01"]
-uuid = mc.ls("JAC", uuid=1)
-#find number by uuid
-for row in ws.values:
-    if row[2] == uuid[0]:
-        mc.rename("JAC", row[0])
-'''
-import PySide2
+
+from maya.app.general.mayaMixin import MayaQWidgetBaseMixin
 import maya.cmds as mc
-from openpyxl import Workbook, load_workbook
-import shutil
 import maya.mel as mel
-#load excel
+import maya.utils as mu
+import shutil
+import time
+
+# 間接パスの指定
 workRootDir = mc.workspace(q = 1, rootDirectory = 1)
-wb = load_workbook(workRootDir + "test.xlsx")
-ws = wb.active
+targetDir = workRootDir + "scenes/"
+print targetDir
 
-#create tableWidget
-tableWidget = QTableWidget()
-headerLabels = [u"学籍番号", u"名前", u"UUID"]
-tableWidget.setColumnCount(len(headerLabels))
-tableWidget.setRowCount(len(tuple(ws.rows)))
-tableWidget.setHorizontalHeaderLabels(headerLabels)
-
-tableWidget.verticalHeader().setVisible(False)
-
-for row, rowData in enumerate(ws.values):
-    if rowData[0] is None:
-        break
-    for col, v in enumerate(rowData):
-        item = QTableWidgetItem(v)
-        tableWidget.setItem(row, col, item)
+class CopyWork(QObject):
+    finished = Signal()
+    progress = Signal(int)
+    def __init__(self, table, count, parent=None):
+        super(CopyWork, self).__init__(parent)
         
+        self.count = count
+        self.table = table
 
-tableWidget.show()
-#find item
-tableWidget.setItemSelected(item, 1)
-=============================================================================
-#newsheet = "kadai01"
-#ws = wb.create_sheet(newsheet)
-uuidcol = ws["c"]
-i = 0
-for row in ws.iter_rows(min_row = 1):
-    if row[0].value is none:
-        #file end
-        #print "end"
-        break
-    num = row[0].value
-    name = row[1].value
-    filename = num + " " + name
-    #create jac empty group
-    jac = mc.group(em=true, name="jac")
-    uuid = mc.ls("jac", uuid=1)
-    uuidcol[i].value = uuid[0].encode("ascii", "ignore")
-    i += 1
-    #hiden jac empty group
-    mc.setattr("jac.hiddeninoutliner", true)
-    mc.outlinereditor("outlinerpanel1", edit = true, refresh = true)
-    #lock jac, save and copy map file
-    mc.locknode("jac", lock = 1)
-    mel.eval("file -save")
-    originmapname = "map1.mb"
-    originmapdir = workrootdir + "scenes/" + originmapname
-    targetmapdir = workrootdir + "scenes/" + filename + ".mb"
-    shutil.copy(originmapdir, targetmapdir)
-    #unlock and delete jac
-    mc.locknode("jac", lock = 0)
-    mc.delete(jac)
-#save excel
-wb.save(workrootdir + "test.xlsx")
-=============================================================================
+    def copyMap(self):
+        #generate authorStr
+        for i in range(0, self.count):
+            mu.executeInMainThreadWithResult(self.doInMain, i)
+            self.progress.emit(i + 1)
+        self.finished.emit()
+        
+    def doInMain(self, i):
+        number = self.table[i][0]
+        name = self.table[i][1]
+        authorStr = number + name
+        
+        # 1.add author to attribute
+        # #create author node and set hidden
+        # authorNode = mc.group(em = 1, name = "AuthorNode")
+        # mc.setAttr("AuthorNode.hiddenInOutliner", True)
+        # #add attr and lock it
+        # mc.addAttr("AuthorNode", longName = "Author", dataType = "string")
+        # mc.setAttr("AuthorNode.Author", authorStr, type = "string")
+        # mc.setAttr("AuthorNode.Author", lock = 1)
+        
+        # 2.add author(number) to group name
+        # create author node and set hidden
+        groupName = "Author_" + number
+        authorNode = mc.group(em = 1, name = groupName)
+        mc.setAttr(groupName + ".hiddenInOutliner", True)
+        
+        #lock node
+        mc.lockNode(authorNode, lock = 1)
+        #fresh outliner
+        mc.outlinerEditor("outlinerPanel1", edit = 1, refresh = 1)
+        
+        #save and copy map
+        mel.eval("file -save")
+        #originMapName = "origin.mb"
+        #originMap = workRootDir + "scenes/" + originMapName
+        originMap = mc.file(q = 1, sn = 1)
+        targetMapName = authorStr
+        targetMap = targetDir + targetMapName + ".mb"
+        print originMap
+        print targetMap
+        shutil.copy(originMap, targetMap)
+        
+        #unlock and delete node
+        mc.lockNode(authorNode, lock = 0)
+        mc.delete(authorNode)
+        
+        return groupName
+
+## MainWindowを作るクラス
+class MainWindow(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
+    def __init__(self, parent=None):
+        super(MainWindow, self).__init__(parent)
+        # # ウィンドウタイトルをUIから取得
+        # self.setWindowTitle(self.UI.windowTitle())
+        # # ウィジェットをセンターに配置
+        # self.setCentralWidget(self.UI)
+        
+        # try to layout with code
+        # create widget
+        self.FileNameLabel = QLabel("Excel File:", self)
+        self.FileNameValueLabel = QLabel("")
+        self.Browse1Btn = QPushButton("Browse..")
+        
+        self.TargetDirLabel = QLabel("Directory:")
+        self.TargetDirValueLabel = QLabel(targetDir + "scenes")
+        self.Browse2Btn = QPushButton("Browse..")
+        self.isDefaultDir = True
+
+        self.CopyBtn = QPushButton("Copy Map")
+        self.LockBtn = QPushButton("Lock Node")
+        self.UnlockBtn = QPushButton("Unlock Node")
+
+        # layout
+        layoutHBox1 = QHBoxLayout()
+        layoutHBox1.addWidget(self.FileNameLabel)
+        layoutHBox1.addWidget(self.FileNameValueLabel)
+        self.FileNameValueLabel.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.FileNameValueLabel.setFixedSize(200, 20)
+        layoutHBox1.addWidget(self.Browse1Btn)
+        
+        layoutHBox2 = QHBoxLayout()
+        layoutHBox2.addWidget(self.TargetDirLabel)
+        layoutHBox2.addWidget(self.TargetDirValueLabel)
+        self.TargetDirValueLabel.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.TargetDirValueLabel.setFixedSize(200, 20)
+        layoutHBox2.addWidget(self.Browse2Btn)
+
+        layoutHBox3 = QHBoxLayout()
+        layoutHBox3.addWidget(self.LockBtn)
+        layoutHBox3.addWidget(self.UnlockBtn)
+        
+        layoutVBox = QVBoxLayout()
+        layoutVBox.addLayout(layoutHBox1)
+        layoutVBox.addLayout(layoutHBox2)
+        layoutVBox.addWidget(self.CopyBtn)
+        layoutVBox.addLayout(layoutHBox3)
+                                    
+        # self.setLayout(layoutVBox)#
+        self.setWindowTitle("JAC")
+        
+        widget = QWidget()
+        widget.setLayout(layoutVBox)
+        self.setCentralWidget(widget)
+        
+        # 接続
+        self.Browse1Btn.clicked.connect(self.browseExcelFile)
+        self.Browse2Btn.clicked.connect(self.browseTargetFolder)
+        self.CopyBtn.clicked.connect(self.copyMap)
+        self.LockBtn.clicked.connect(self.lockNode)
+        self.UnlockBtn.clicked.connect(self.unlockNode)
+
+        #for button disable test
+        #self.CopyBtn.setEnabled(False)
+        
+    def browseTargetFolder(self):
+        global targetDir
+        #open dir dialog
+        openDir = QFileDialog.getExistingDirectory(self, "Target Directory", "", QFileDialog.ShowDirsOnly)
+        if openDir != "":
+            #fix dir
+            if openDir[-1] != "/":
+                openDir += "/"
+
+            self.TargetDirValueLabel.setText(openDir)
+            print openDir
+            targetDir = openDir
+
+    def browseExcelFile(self):
+        #open file dialog
+        fileDir = QFileDialog.getOpenFileName(self, "Open Excel", "", "Excel Files(*.xlsx)")
+        splitStr = fileDir[0].split("/")
+        fileName = splitStr[-1]
+        #print str[-1]
+        # self.UI.FileNameValue.setText(fileName)
+        self.FileNameValueLabel.setText(fileName)
+        #load file
+        self.wb = load_workbook(fileDir[0])
+    
+    def copyMap(self):
+        ws = self.wb[self.wb.sheetnames[0]]
+        self.count = 0
+        for row in ws.values:
+            if row[0] is None:
+                #file end
+                break
+            self.count += 1
+        
+        self.ProgressDialog = QProgressDialog("Copying Map", "Close", 0, self.count)
+        self.ProgressDialog.setWindowTitle("Copy Progress")
+        self.ProgressDialog.show()
+        table = tuple(ws.values)
+        
+        #set operation thread
+        self.thread = QThread()
+        self.copyWork = CopyWork(table, self.count)
+        #disable button to avoid double click(crush issue)
+        self.CopyBtn.setEnabled(False)
+        #self.copyWork.copyMap()  # run without thread for test
+        
+        self.copyWork.moveToThread(self.thread)
+        self.copyWork.progress.connect(self.emitProgress)
+        self.copyWork.finished.connect(self.copyDone)
+        self.copyWork.finished.connect(self.thread.quit)
+        self.copyWork.finished.connect(self.copyWork.deleteLater)
+        #enable button
+        self.copyWork.finished.connect(
+            lambda: self.CopyBtn.setEnabled(True)
+        )
+
+        self.thread.started.connect(self.copyWork.copyMap)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.start()
+    
+    def emitProgress(self, p):
+        self.copiedCountStr = str(p)
+        label = self.copiedCountStr + "/" + str(self.count)
+        self.ProgressDialog.setLabelText("Copying Map: " + label)
+        self.ProgressDialog.setValue(p)
+    
+    def copyDone(self):
+        print "copy done"
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle("Done")
+        msgBox.setText(r"<b>Copy Done<b>")
+        msgBox.setTextFormat(Qt.RichText)
+        msgBox.setInformativeText(self.copiedCountStr + " Map Copied.")
+        #msgBox.setDetailedText(self.copyCount + " Map Copied.")
+        msgBox.addButton(QMessageBox.Ok)
+        
+        msgBox.exec_()
+        
+    def lockNode(self):
+        nodes = mc.ls(sl = 1)
+        for node in nodes:
+            mc.lockNode(node, lock = 1)
+            print node + " locked"
+    def unlockNode(self):
+        nodes = mc.ls(sl = 1)
+        for node in nodes:
+            mc.lockNode(node, lock = 0)
+            print node + " unlocked"
+## MainWindowの起動
+def main():
+    window = MainWindow()
+    window.show()
+
+if __name__ == '__main__':
+
+    main()
