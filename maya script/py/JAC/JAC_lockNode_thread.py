@@ -15,10 +15,9 @@ import shutil
 import time
 
 # 間接パスの指定
-UIFILEPATH = "D:/19cu0217/FishPythonProject/maya script/qtui/JAC_lockNode.ui"
 workRootDir = mc.workspace(q = 1, rootDirectory = 1)
-
-print workRootDir
+targetDir = workRootDir
+print targetDir
 
 class CopyWork(QObject):
     finished = Signal()
@@ -32,12 +31,11 @@ class CopyWork(QObject):
     def copyMap(self):
         #generate authorStr
         for i in range(0, self.count):
-            mu.executeInMainThreadWithResult(self.doInMain)
+            mu.executeInMainThreadWithResult(self.doInMain, i)
             self.progress.emit(i + 1)
-            #time.sleep(0.1)
         self.finished.emit()
         
-    def doInMain(self):
+    def doInMain(self, i):
         number = self.table[i][0]
         name = self.table[i][1]
         authorStr = number + name
@@ -64,10 +62,13 @@ class CopyWork(QObject):
         
         #save and copy map
         mel.eval("file -save")
-        originMapName = "origin.mb"
+        #originMapName = "origin.mb"
+        #originMap = workRootDir + "scenes/" + originMapName
+        originMap = mc.file(q = 1, sn = 1)
         targetMapName = authorStr
-        originMap = workRootDir + "scenes/" + originMapName
-        targetMap = workRootDir + "scenes/" + targetMapName + ".mb"
+        targetMap = targetDir + targetMapName + ".mb"
+        print originMap
+        print targetMap
         shutil.copy(originMap, targetMap)
         
         #unlock and delete node
@@ -80,8 +81,6 @@ class CopyWork(QObject):
 class MainWindow(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        # # UIのパスを指定
-        # self.UI = QUiLoader().load(UIFILEPATH)
         # # ウィンドウタイトルをUIから取得
         # self.setWindowTitle(self.UI.windowTitle())
         # # ウィジェットをセンターに配置
@@ -91,7 +90,13 @@ class MainWindow(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         # create widget
         self.FileNameLabel = QLabel("Excel File:", self)
         self.FileNameValueLabel = QLabel("")
-        self.BrowseBtn = QPushButton("Brose..")
+        self.Browse1Btn = QPushButton("Browse..")
+        
+        self.TargetDirLabel = QLabel("Directory:")
+        self.TargetDirValueLabel = QLabel(targetDir + "scenes")
+        self.Browse2Btn = QPushButton("Browse..")
+        self.isDefaultDir = True
+
         self.CopyBtn = QPushButton("Copy Map")
         self.LockBtn = QPushButton("Lock Node")
         self.UnlockBtn = QPushButton("Unlock Node")
@@ -100,16 +105,26 @@ class MainWindow(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         layoutHBox1 = QHBoxLayout()
         layoutHBox1.addWidget(self.FileNameLabel)
         layoutHBox1.addWidget(self.FileNameValueLabel)
-        layoutHBox1.addWidget(self.BrowseBtn)
+        self.FileNameValueLabel.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.FileNameValueLabel.setFixedSize(200, 20)
+        layoutHBox1.addWidget(self.Browse1Btn)
         
         layoutHBox2 = QHBoxLayout()
-        layoutHBox2.addWidget(self.LockBtn)
-        layoutHBox2.addWidget(self.UnlockBtn)
+        layoutHBox2.addWidget(self.TargetDirLabel)
+        layoutHBox2.addWidget(self.TargetDirValueLabel)
+        self.TargetDirValueLabel.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.TargetDirValueLabel.setFixedSize(200, 20)
+        layoutHBox2.addWidget(self.Browse2Btn)
+
+        layoutHBox3 = QHBoxLayout()
+        layoutHBox3.addWidget(self.LockBtn)
+        layoutHBox3.addWidget(self.UnlockBtn)
         
         layoutVBox = QVBoxLayout()
         layoutVBox.addLayout(layoutHBox1)
-        layoutVBox.addWidget(self.CopyBtn)
         layoutVBox.addLayout(layoutHBox2)
+        layoutVBox.addWidget(self.CopyBtn)
+        layoutVBox.addLayout(layoutHBox3)
                                     
         # self.setLayout(layoutVBox)#
         self.setWindowTitle("JAC")
@@ -119,16 +134,28 @@ class MainWindow(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         self.setCentralWidget(widget)
         
         # 接続
-        self.BrowseBtn.clicked.connect(self.openFileDialog)
+        self.Browse1Btn.clicked.connect(self.browseExcelFile)
+        self.Browse2Btn.clicked.connect(self.browseTargetFolder)
         self.CopyBtn.clicked.connect(self.copyMap)
         self.LockBtn.clicked.connect(self.lockNode)
         self.UnlockBtn.clicked.connect(self.unlockNode)
-        # self.UI.BrowseBtn.clicked.connect(self.openFileDialog)
-        # self.UI.CopyBtn.clicked.connect(self.copyMap)
         
-    def openFileDialog(self):
+    def browseTargetFolder(self):
+        global targetDir
+        #open dir dialog
+        openDir = QFileDialog.getExistingDirectory(self, "Target Directory", "", QFileDialog.ShowDirsOnly)
+        if openDir != "":
+            #fix dir
+            if openDir[-1] != "/":
+                openDir += "/"
+
+            self.TargetDirValueLabel.setText(openDir)
+            print openDir
+            targetDir = openDir
+
+    def browseExcelFile(self):
         #open file dialog
-        fileDir = QtWidgets.QFileDialog.getOpenFileName(self, "Open Excel", "", "Excel Files(*.xlsx)")
+        fileDir = QFileDialog.getOpenFileName(self, "Open Excel", "", "Excel Files(*.xlsx)")
         splitStr = fileDir[0].split("/")
         fileName = splitStr[-1]
         #print str[-1]
@@ -154,7 +181,7 @@ class MainWindow(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         #set operation thread
         self.thread = QThread()
         self.copyWork = CopyWork(table, self.count)
-        # self.copyWork.copyMap()  # run without thread
+        #self.copyWork.copyMap()  # run without thread for test
         
         self.copyWork.moveToThread(self.thread)
         self.copyWork.progress.connect(self.emitProgress)
@@ -171,7 +198,6 @@ class MainWindow(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         label = self.copiedCountStr + "/" + str(self.count)
         self.ProgressDialog.setLabelText("Copying Map: " + label)
         self.ProgressDialog.setValue(p)
-        
     
     def copyDone(self):
         print "copy done"
@@ -201,4 +227,5 @@ def main():
     window.show()
 
 if __name__ == '__main__':
+
     main()
